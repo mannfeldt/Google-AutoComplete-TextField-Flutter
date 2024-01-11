@@ -27,6 +27,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   bool showError;
   double? containerHorizontalPadding;
   double? containerVerticalPadding;
+  List<String>? types = [];
 
   GooglePlaceAutoCompleteTextField(
       {required this.textEditingController,
@@ -37,6 +38,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.isLatLngRequired = true,
       this.textStyle = const TextStyle(),
       this.countries,
+      this.types,
       this.getPlaceDetailWithLatLng,
       this.itemBuilder,
       this.boxDecoration,
@@ -112,7 +114,11 @@ class _GooglePlaceAutoCompleteTextFieldState
   getLocation(String text) async {
     String url =
         "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}";
-    url += "&types=food";
+
+    if (widget.types != null) {
+      url += "&types=";
+      url += widget.types!.join("|");
+    }
 
     if (widget.countries != null) {
       // in
