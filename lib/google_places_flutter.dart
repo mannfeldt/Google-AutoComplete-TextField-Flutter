@@ -116,7 +116,7 @@ class _GooglePlaceAutoCompleteTextFieldState
         "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}&language=en";
 
     url +=
-        "&strictbounds=true&locationrestriction=rectangle:-8.86549,114.45030|-8.05459,115.72788";
+        "&strictbounds=true&locationrestriction=rectangle:-8.85308,114.42283|-8.05842,115.71607";
 
     if (widget.types != null) {
       url += "&types=";
