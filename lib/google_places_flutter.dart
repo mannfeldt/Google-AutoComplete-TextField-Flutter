@@ -113,7 +113,10 @@ class _GooglePlaceAutoCompleteTextFieldState
 
   getLocation(String text) async {
     String url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}";
+        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}&language=en";
+
+    url +=
+        "&strictbounds=true&locationrestriction=rectangle:-8.86549,114.45030|-8.05459,115.72788";
 
     if (widget.types != null) {
       url += "&types=";
