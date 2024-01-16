@@ -22,6 +22,34 @@ class RectangleLocationBounds {
   });
 }
 
+String buildUrl(
+  String text, {
+  required String apiKey,
+  List<String>? types,
+  List<String>? countries,
+  RectangleLocationBounds? locationBounds,
+}) {
+  String url =
+      "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=$apiKey&language=en";
+
+  if (locationBounds != null) {
+    url +=
+        "&strictbounds=true&locationrestriction=rectangle:${locationBounds.south},${locationBounds.west}|${locationBounds.north},${locationBounds.east}";
+  }
+  // -8.85308,114.42283|-8.05842,115.71607 BALI
+
+  if (types != null) {
+    url += "&types=";
+    url += types.join("|");
+  }
+
+  if (countries != null) {
+    url += "&components=country:";
+    url += countries.join("|country:");
+  }
+  return url;
+}
+
 class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   InputDecoration inputDecoration;
   ItemClick? itemClick;
@@ -128,33 +156,13 @@ class _GooglePlaceAutoCompleteTextFieldState
   }
 
   getLocation(String text) async {
-    String url =
-        "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}&language=en";
-
-    if (widget.locationBounds != null) {
-      url +=
-          "&strictbounds=true&locationrestriction=rectangle:${widget.locationBounds!.south},${widget.locationBounds!.west}|${widget.locationBounds!.north},${widget.locationBounds!.east}";
-    }
-    // -8.85308,114.42283|-8.05842,115.71607 BALI
-
-    if (widget.types != null) {
-      url += "&types=";
-      url += widget.types!.join("|");
-    }
-
-    if (widget.countries != null) {
-      // in
-
-      for (int i = 0; i < widget.countries!.length; i++) {
-        String country = widget.countries![i];
-
-        if (i == 0) {
-          url = url + "&components=country:$country";
-        } else {
-          url = url + "|" + "country:" + country;
-        }
-      }
-    }
+    String url = buildUrl(
+      text,
+      apiKey: widget.googleAPIKey,
+      locationBounds: widget.locationBounds,
+      types: widget.types,
+      countries: widget.countries,
+    );
 
     if (_cancelToken?.isCancelled == false) {
       _cancelToken?.cancel();
