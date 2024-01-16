@@ -132,6 +132,7 @@ class _GooglePlaceAutoCompleteTextFieldState
           children: [
             Expanded(
               child: TextFormField(
+                autocorrect: false,
                 decoration: widget.inputDecoration,
                 style: widget.textStyle,
                 controller: widget.textEditingController,
