@@ -8,6 +8,20 @@ import 'package:rxdart/rxdart.dart';
 
 import 'DioErrorHandler.dart';
 
+class RectangleLocationBounds {
+  final String north;
+  final String east;
+  final String south;
+  final String west;
+
+  RectangleLocationBounds({
+    required this.north,
+    required this.east,
+    required this.south,
+    required this.west,
+  });
+}
+
 class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   InputDecoration inputDecoration;
   ItemClick? itemClick;
@@ -28,6 +42,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
   double? containerHorizontalPadding;
   double? containerVerticalPadding;
   List<String>? types = [];
+  RectangleLocationBounds? locationBounds;
 
   GooglePlaceAutoCompleteTextField(
       {required this.textEditingController,
@@ -46,6 +61,7 @@ class GooglePlaceAutoCompleteTextField extends StatefulWidget {
       this.seperatedBuilder,
       this.showError = true,
       this.containerHorizontalPadding,
+      this.locationBounds,
       this.containerVerticalPadding});
 
   @override
@@ -115,8 +131,11 @@ class _GooglePlaceAutoCompleteTextFieldState
     String url =
         "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$text&key=${widget.googleAPIKey}&language=en";
 
-    url +=
-        "&strictbounds=true&locationrestriction=rectangle:-8.85308,114.42283|-8.05842,115.71607";
+    if (widget.locationBounds != null) {
+      url +=
+          "&strictbounds=true&locationrestriction=rectangle:${widget.locationBounds!.south},${widget.locationBounds!.west}|${widget.locationBounds!.north},${widget.locationBounds!.east}";
+    }
+    // -8.85308,114.42283|-8.05842,115.71607 BALI
 
     if (widget.types != null) {
       url += "&types=";
